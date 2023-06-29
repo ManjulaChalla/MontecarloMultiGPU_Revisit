@@ -2,10 +2,13 @@
 
 The `MonteCarloMultiGPU` sample evaluates fair call price for a given set of European options using the Monte Carlo approach. MonteCarlo simulation is one of the most important algorithms in quantitative finance. This sample uses a single CPU Thread to control multiple GPUs.
 
-| Property                       | Description
-|:---                               |:---
-| What you will learn               | Migrating MonteCarloMultiGPU from CUDA to SYCL
-| Time to complete                  | 15 minutes
+| Area                   | Description
+|:---                    |:---
+| What you will learn    | How to begin migrating CUDA to SYCL
+| Time to complete       | 15 minutes
+| Category               | Concepts and Functionality
+
+>**Note**: This sample is migrated from NVIDIA CUDA sample. See the [MontecarloMultiGPU](https://github.com/NVIDIA/cuda-samples/tree/master/Samples/0_Introduction/concurrentKernels) sample in the NVIDIA/cuda-samples GitHub.
 
 
 ## Purpose
@@ -13,7 +16,7 @@ The Monte Carlo Method provides a way to compute expected values by generating r
 
 With the help of a GPU, we reduce and speed up the problem by parallelizing each path. That is, we can assign each path to a single thread, simulating thousands of them in parallel, with massive savings in computational power and time.
 
-> **Note**: We use Intel® open-sources SYCLomatic tool which assists developers in porting CUDA code automatically to SYCL code. To finish the process, developers complete the rest of the coding manually and then tune to the desired level of performance for the target architecture. User's can also use SYCLomatic Tool which comes along with the Intel® oneAPI Base Toolkit.
+> **Note**: The sample used the open-source SYCLomatic tool that assists developers in porting CUDA code to SYCL code. To finish the process, you must complete the rest of the coding manually and then tune to the desired level of performance for the target architecture. You can also use the Intel® DPC++ Compatibility Tool available to augment Base Toolkit.
 
 This sample contains two versions in the following folders:
 
@@ -21,6 +24,44 @@ This sample contains two versions in the following folders:
 |:---                                  |:---
 | 01_dpct_output                       | Contains output of SYCLomatic Tool used to migrate SYCL-compliant code from CUDA code. This SYCL code has some unmigrated code that has to be manually fixed to get full functionality.
 | 02_sycl_migrated                     | Contains manually migrated SYCL code from CUDA code.
+
+## Prerequisites
+
+| Optimized for         | Description
+|:---                   |:---
+| OS                    | Ubuntu* 20.04
+| Hardware              | Intel® Gen9 <br> Gen11 <br> Xeon CPU
+| Software              | SYCLomatic <br> Intel® oneAPI Base Toolkit (Base Kit)
+
+For information on how to use SYCLomatic, refer to the materials at *[Migrate from CUDA* to C++ with SYCL*](https://www.intel.com/content/www/us/en/developer/tools/oneapi/training/migrate-from-cuda-to-cpp-with-sycl.html)*.
+
+## Key Implementation Details
+
+This sample demonstrates the migration of the following prominent CUDA feature: 
+- Random Number Generator
+
+Calls to cuRAND function APIs are being translates to equivalent Intel® oneAPI Math Kernel Library (oneMKL) function calls. 
+
+The `MonteCarloOneBlockPerOption()` kernel is the main computation kernel. It calculates the integral over all paths using a single thread block per option. 
+
+The `rngSetupStates()` kernel initializes the random number generator states for each thread. 
+
+The `initMonteCarloGPU()` function allocates memory on the GPU, sets up the random number generator states, and initializes other variables. 
+
+The `closeMonteCarloGPU()` function computes statistics and deallocates memory on the GPU. 
+
+Finally, the `MonteCarloGPU()` function performs the main computations by copying data to the GPU, launching the computation kernel, and copying the results back to the host.
+
+>**Note**: Refer to [Workflow for a CUDA* to SYCL* Migration](https://www.intel.com/content/www/us/en/developer/tools/oneapi/training/cuda-sycl-migration-workflow.html) for general information about the migration workflow.
+
+## Set Environment Variables
+
+When working with the command-line interface (CLI), you should configure the oneAPI toolkits using environment variables. Set up your CLI environment by sourcing the `setvars` script every time you open a new terminal window. This practice ensures that your compiler, libraries, and tools are ready for development.
+
+## Migrate the Code Using SYCLomatic
+
+For this sample, the SYCLomatic tool automatically migrates 100% of the CUDA code to SYCL. Follow these steps to generate the SYCL code using the compatibility tool.
+
 
 ### Workflow For CUDA to SYCL migration
 
