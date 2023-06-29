@@ -92,7 +92,7 @@ For this sample, the SYCLomatic tool automatically migrates 100% of the CUDA cod
    ```
    git clone https://github.com/NVIDIA/cuda-samples.git
    ```
-2. Change to the concurrentKernels sample directory.
+2. Change to the MonteCarloMultiGPU sample directory.
    ```
    cd cuda-samples/Samples/5_Domain_Specific/MonteCarloMultiGPU/
    ```
