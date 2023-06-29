@@ -8,7 +8,7 @@ The `MonteCarloMultiGPU` sample evaluates fair call price for a given set of Eur
 | Time to complete       | 15 minutes
 | Category               | Concepts and Functionality
 
->**Note**: This sample is migrated from NVIDIA CUDA sample. See the [MontecarloMultiGPU](https://github.com/NVIDIA/cuda-samples/tree/master/Samples/0_Introduction/concurrentKernels) sample in the NVIDIA/cuda-samples GitHub.
+>**Note**: This sample is migrated from NVIDIA CUDA sample. See the [MonteCarloMultiGPU](https://github.com/NVIDIA/cuda-samples/tree/master/Samples/5_Domain_Specific/MonteCarloMultiGPU) sample in the NVIDIA/cuda-samples GitHub.
 
 
 ## Purpose
