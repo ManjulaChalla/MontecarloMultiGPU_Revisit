@@ -54,6 +54,32 @@ Finally, the `MonteCarloGPU()` function performs the main computations by copyin
 
 >**Note**: Refer to [Workflow for a CUDA* to SYCL* Migration](https://www.intel.com/content/www/us/en/developer/tools/oneapi/training/cuda-sycl-migration-workflow.html) for general information about the migration workflow.
 
+### CUDA source code evaluation
+
+Pricing of European Options can be done by applying the Black-Scholes formula and with MonteCarlo approach.
+
+MonteCarlo Method first generates a random number based on a probability distribution. The random number then uses the additional inputs of volatility and time to expiration to generate a stock price. The generated stock price at the time of expiration is then used to calculate the value of the option. The model then calculates results over and over, each time using a different set of random values from the probability functions
+
+The first stage of the computation is the generation of a normally distributed N(0, 1)number sequence, which comes down to uniformly distributed sequence generation.Once we’ve generated the desired number of samples, we use them to compute an expected value and confidence width for the underlying option. 
+
+The Black-Scholes model relies on fixed inputs (current stock price, strike price, time until expiration, volatility, risk free rates, and dividend yield).The model is based on geometric Brownian motion with constant drift and volatility.We can calculate the price of the European put and call options explicitly using the Black–Scholes formula.
+
+The price of a call option C in terms of the Black–Scholes parameters is
+
+C=N(d1)×S−N(d2)×PV(K)
+
+where:
+
+•	d1=1σ√T[log(SK)+(r+σ22)T]
+
+•	d2=d1−σ√T
+
+•	PV(K)=Kexp(−rT)
+
+After repeatedly computing appropriate averages, the estimated price of options can be obtained, which is consistent with the analytical results from Black-Scholes model.
+
+For information on how to use SYCLomatic, refer to the materials at *[Migrate from CUDA* to C++ with SYCL*](https://www.intel.com/content/www/us/en/developer/tools/oneapi/training/migrate-from-cuda-to-cpp-with-sycl.html)*.
+
 ## Set Environment Variables
 
 When working with the command-line interface (CLI), you should configure the oneAPI toolkits using environment variables. Set up your CLI environment by sourcing the `setvars` script every time you open a new terminal window. This practice ensures that your compiler, libraries, and tools are ready for development.
