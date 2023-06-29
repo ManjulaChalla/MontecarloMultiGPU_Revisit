@@ -62,6 +62,41 @@ When working with the command-line interface (CLI), you should configure the one
 
 For this sample, the SYCLomatic tool automatically migrates 100% of the CUDA code to SYCL. Follow these steps to generate the SYCL code using the compatibility tool.
 
+1. Clone the required GitHub repository to your local environment.
+   ```
+   git clone https://github.com/NVIDIA/cuda-samples.git
+   ```
+2. Change to the concurrentKernels sample directory.
+   ```
+   cd cuda-samples/Samples/5_Domain_Specific/MonteCarloMultiGPU/
+   ```
+3. Generate a compilation database with intercept-build.
+   ```
+   intercept-build make
+   ```
+   This step creates a JSON file named compile_commands.json with all the compiler invocations and stores the names of the input files and the compiler options.
+
+4. Pass the JSON file as input to the Intel® SYCLomatic Compatibility Tool. The result is written to a folder named dpct_output. The --in-root specifies path to the root of the source tree to be migrated.
+   ```
+   c2s -p compile_commands.json --in-root ../../.. --use-custom-helper=api
+   ```
+
+## Build the `MonteCarloMultiGPU` Sample for CPU and GPU
+
+> **Note**: If you have not already done so, set up your CLI
+> environment by sourcing  the `setvars` script in the root of your oneAPI installation.
+>
+> Linux*:
+> - For system wide installations: `. /opt/intel/oneapi/setvars.sh`
+> - For private installations: ` . ~/intel/oneapi/setvars.sh`
+> - For non-POSIX shells, like csh, use the following command: `bash -c 'source <install-dir>/setvars.sh ; exec csh'`
+>
+> Windows*:
+> - `C:\Program Files (x86)\Intel\oneAPI\setvars.bat`
+> - Windows PowerShell*, use the following command: `cmd.exe "/K" '"C:\Program Files (x86)\Intel\oneAPI\setvars.bat" && powershell'`
+>
+> For more information on configuring environment variables, see *[Use the setvars Script with Linux* or macOS*](https://www.intel.com/content/www/us/en/develop/documentation/oneapi-programming-guide/top/oneapi-development-environment-setup/use-the-setvars-script-with-linux-or-macos.html)*.
+
 
 ### Workflow For CUDA to SYCL migration
 
@@ -123,33 +158,21 @@ Finally, the `MonteCarloGPU()` function performs the main computations by copyin
 ## Build the `MonteCarloMultiGPU` Sample for CPU and GPU
 
 > **Note**: If you have not already done so, set up your CLI
-> environment by sourcing  the `setvars` script located in the root of your oneAPI installation.
+> environment by sourcing  the `setvars` script in the root of your oneAPI installation.
 >
 > Linux*:
 > - For system wide installations: `. /opt/intel/oneapi/setvars.sh`
-> - For private installations: `. ~/intel/oneapi/setvars.sh`
-> - For non-POSIX shells, like csh, use the following command: `$ bash -c 'source <install-dir>/setvars.sh ; exec csh'`
+> - For private installations: ` . ~/intel/oneapi/setvars.sh`
+> - For non-POSIX shells, like csh, use the following command: `bash -c 'source <install-dir>/setvars.sh ; exec csh'`
 >
->For more information on environment variables, see [Use the setvars Script with Linux* or macOS*](https://www.intel.com/content/www/us/en/develop/documentation/oneapi-programming-guide/top/oneapi-development-environment-setup/use-the-setvars-script-with-linux-or-macos.html), or [Windows](https://www.intel.com/content/www/us/en/develop/documentation/oneapi-programming-guide/top/oneapi-development-environment-setup/use-the-setvars-script-with-windows.html).
+> Windows*:
+> - `C:\Program Files (x86)\Intel\oneAPI\setvars.bat`
+> - Windows PowerShell*, use the following command: `cmd.exe "/K" '"C:\Program Files (x86)\Intel\oneAPI\setvars.bat" && powershell'`
+>
+> For more information on configuring environment variables, see *[Use the setvars Script with Linux* or macOS*](https://www.intel.com/content/www/us/en/develop/documentation/oneapi-programming-guide/top/oneapi-development-environment-setup/use-the-setvars-script-with-linux-or-macos.html)*.
 
-## Tool assisted migration – SYCLomatic 
-
-For this sample, the SYCLomatic Tool automatically migrates 100% of the CUDA code to SYCL. Follow these steps to generate the SYCL code using the compatibility tool:
-
-1. git clone https://github.com/NVIDIA/cuda-samples.git
-2. cd cuda-samples/Samples/5_Domain_Specific/MonteCarloMultiGPU/
-3. Generate a compilation database with intercept-build
-   ```
-   intercept-build make
-   ```
-4. The above step creates a JSON file named compile_commands.json with all the compiler invocations and stores the names of the input files and the compiler options.
-5. Pass the JSON file as input to the Intel® SYCLomatic Compatibility Tool. The result is written to a folder named dpct_output. The --in-root specifies path to the root of the source tree to be migrated.
-   ```
-   c2s -p compile_commands.json --in-root ../../.. --use-custom-helper=api
-   ```
 ### On Linux*
 
-Perform the following steps:
 1. Change to the sample directory.
 2. Build the program.
    ```
@@ -159,14 +182,15 @@ Perform the following steps:
    $ make
    ```
 
-    By default, this command sequence will build the `01_dpct_output`and `02_sycl_migrated` versions of the program.
+   By default, this command sequence will build the `01_dpct_output`, `02_sycl_migrated` version of the program.
+
 3. Run `02_sycl_migrated` for CPU and GPU.
      ```
     make run_sm_cpu
     make run_sm_gpu (runs on Level-Zero Backend)
     make run_sm_gpu_opencl (runs on OpenCL Backend)
     ```
-    
+
 #### Troubleshooting
 
 If an error occurs, you can get more details by running `make` with
