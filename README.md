@@ -106,7 +106,7 @@ For this sample, the SYCLomatic tool automatically migrates 100% of the CUDA cod
    c2s -p compile_commands.json --in-root ../../.. --use-custom-helper=api
    ```
 
-## Build the `MonteCarloMultiGPU` Sample for CPU and GPU
+## Build and Run the `MonteCarloMultiGPU` Sample
 
 > **Note**: If you have not already done so, set up your CLI
 > environment by sourcing  the `setvars` script in the root of your oneAPI installation.
