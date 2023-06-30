@@ -12,7 +12,7 @@ The `MonteCarloMultiGPU` sample evaluates fair call price for a given set of Eur
 
 
 ## Purpose
-The Monte Carlo Method provides a way to compute expected values by generating random scenarios and then averaging them. The execution of these random scenarios can be parallelized very efficiently. 
+The MonteCarlo Method provides a way to compute expected values by generating random scenarios and then averaging them. The execution of these random scenarios can be parallelized very efficiently. 
 
 With the help of a GPU, we reduce and speed up the problem by parallelizing each path. That is, we can assign each path to a single thread, simulating thousands of them in parallel, with massive savings in computational power and time.
 
@@ -33,14 +33,12 @@ This sample contains two versions in the following folders:
 | Hardware              | Intel® Gen9 <br> Gen11 <br> Xeon CPU
 | Software              | SYCLomatic <br> Intel® oneAPI Base Toolkit (Base Kit)
 
-For information on how to use SYCLomatic, refer to the materials at *[Migrate from CUDA* to C++ with SYCL*](https://www.intel.com/content/www/us/en/developer/tools/oneapi/training/migrate-from-cuda-to-cpp-with-sycl.html)*.
-
 ## Key Implementation Details
 
 This sample demonstrates the migration of the following prominent CUDA feature: 
 - Random Number Generator
 
-Calls to cuRAND function APIs are being translates to equivalent Intel® oneAPI Math Kernel Library (oneMKL) function calls. 
+Calls to cuRAND function APIs are being translated to equivalent Intel® oneAPI Math Kernel Library (oneMKL) function calls. 
 
 The `MonteCarloOneBlockPerOption()` kernel is the main computation kernel. It calculates the integral over all paths using a single thread block per option. 
 
@@ -60,9 +58,9 @@ Pricing of European Options can be done by applying the Black-Scholes formula an
 
 MonteCarlo Method first generates a random number based on a probability distribution. The random number then uses the additional inputs of volatility and time to expiration to generate a stock price. The generated stock price at the time of expiration is then used to calculate the value of the option. The model then calculates results over and over, each time using a different set of random values from the probability functions
 
-The first stage of the computation is the generation of a normally distributed N(0, 1)number sequence, which comes down to uniformly distributed sequence generation.Once we’ve generated the desired number of samples, we use them to compute an expected value and confidence width for the underlying option. 
+The first stage of the computation is the generation of a normally distributed N(0, 1)number sequence, which comes down to uniformly distributed sequence generation. Once we’ve generated the desired number of samples, we use them to compute an expected value and confidence width for the underlying option. 
 
-The Black-Scholes model relies on fixed inputs (current stock price, strike price, time until expiration, volatility, risk free rates, and dividend yield).The model is based on geometric Brownian motion with constant drift and volatility.We can calculate the price of the European put and call options explicitly using the Black–Scholes formula.
+The Black-Scholes model relies on fixed inputs (current stock price, strike price, time until expiration, volatility, risk free rates, and dividend yield). The model is based on geometric Brownian motion with constant drift and volatility. We can calculate the price of the European put and call options explicitly using the Black–Scholes formula.
 
 The price of a call option C in terms of the Black–Scholes parameters is
 
@@ -102,7 +100,8 @@ For this sample, the SYCLomatic tool automatically migrates 100% of the CUDA cod
    ```
    This step creates a JSON file named compile_commands.json with all the compiler invocations and stores the names of the input files and the compiler options.
 
-4. Pass the JSON file as input to the Intel® SYCLomatic Compatibility Tool. The result is written to a folder named dpct_output. The --in-root specifies path to the root of the source tree to be migrated.
+4. Pass the JSON file as input to the Intel® SYCLomatic Compatibility Tool. The result is written to a folder named dpct_output. The `--in-root` specifies path to the root of the source tree to be migrated. The `--use-custom-helper` option will make a copy of dpct header files/functions used in migrated code into the dpct_output folder as include folder.
+
    ```
    c2s -p compile_commands.json --in-root ../../.. --use-custom-helper=api
    ```
